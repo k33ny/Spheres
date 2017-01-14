@@ -15,6 +15,7 @@ public class TurretController : MonoBehaviour {
     public Sprite sprite;
     public int index;
     public GameObject[] upgrades;
+    public string description;
 
     [Header("Developer's Properties")]
     public Vector3 offset = new Vector3(0, 0.5f, 0);

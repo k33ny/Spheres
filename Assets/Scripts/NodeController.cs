@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 
 public class NodeController : MonoBehaviour {
@@ -13,11 +14,13 @@ public class NodeController : MonoBehaviour {
     void Start()
     {
         r = GetComponent<Renderer>();
-        defaultColor = r.material.color;        
+        defaultColor = r.material.color;
+        r.sortingOrder = 1;       
     }   
 
     void OnMouseUp()
-    {        
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return; 
         SelectNode();
         if (turret == null) MenuController.controll.ChangeMenu(0);
         else MenuController.controll.ChangeMenu(turret.GetComponent<TurretController>().index);
@@ -25,11 +28,12 @@ public class NodeController : MonoBehaviour {
 
     void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         if (selectedNode != transform.gameObject) r.material.color = selectColor;
     }
 
     void OnMouseExit()
-    {
+    {        
         if (transform.gameObject != selectedNode) r.material.color = defaultColor;
     }
 

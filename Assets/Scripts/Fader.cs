@@ -35,12 +35,18 @@ public class Fader : MonoBehaviour {
             currentAlph = Mathf.Clamp01(currentAlph);
             image.color = new Color(0, 0, 0, currentAlph);
         }
-        else stable = true;
+        else
+        {
+            stable = true;
+            fadeScreenPrefab.SetActive(!stable);            
+        }
+
     }
 
     public float FadeIn(float speed = 0)
     {
         stable = false;
+        fadeScreenPrefab.SetActive(!stable);
         if (speed > 0) controll.fadeSpeed = speed;
         controll.image.color = new Color(0, 0, 0, 1);
         controll.dir = -1;
@@ -52,6 +58,7 @@ public class Fader : MonoBehaviour {
     public float FadeOut(float speed = 0)
     {
         stable = false;
+        fadeScreenPrefab.SetActive(!stable);
         if (speed > 0) controll.fadeSpeed = speed;
         controll.image.color = new Color(0, 0, 0, 0);
         controll.dir = 1;
