@@ -35,6 +35,7 @@ public class PauseController : MonoBehaviour {
 
     public void Pause()
     {
+        Fader.controll.FadeOut(1.2f);
         pauseMenu.gameObject.SetActive(true);
         isPaused = true;
         Time.timeScale = 0;
@@ -42,6 +43,7 @@ public class PauseController : MonoBehaviour {
 
     public void Unpause()
     {
+        Fader.controll.FadeIn(1.2f);
         pauseMenu.gameObject.SetActive(false);
         isPaused = false;
         Time.timeScale = 1;
@@ -80,12 +82,11 @@ public class PauseController : MonoBehaviour {
 
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
         GameController.controll.sfxVolume = sfxSlider.value;
         GameController.controll.muteSFX = sfxToggle.isOn;
         GameController.controll.musicVolume = musicSlider.value;
-        GameController.controll.muteMusic  = musicToggle.isOn;
-
+        GameController.controll.muteMusic = musicToggle.isOn;
+        GameController.controll.Load(1);
     }
 
     public void Load()
@@ -96,4 +97,6 @@ public class PauseController : MonoBehaviour {
         GameController.controll.muteMusic = musicToggle.isOn;
         GameController.controll.Load();
     }
+
+    
 }

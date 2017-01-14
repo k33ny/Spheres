@@ -20,10 +20,15 @@ public class GameController : MonoBehaviour {
         if (controll == null)
         {
             controll = this;
-            DontDestroyOnLoad(transform.gameObject);
+            DontDestroyOnLoad(transform.gameObject);            
             backgroundMusic = transform.GetComponent<AudioSource>();
         }
         else Destroy(transform.gameObject);
+    }
+
+    private void Start()
+    {
+        Fader.controll.FadeIn(0.1f);
     }
 
     public void Save()
@@ -52,25 +57,28 @@ public class GameController : MonoBehaviour {
         file.Close();
     }
 
-    public void Load()
+    public void Load(int levelIndex = 0)
     {
-        if (File.Exists(Application.persistentDataPath + "/" + fileName))
-        {
+        if (File.Exists(Application.persistentDataPath + "/" + fileName) && levelIndex == 0)
+        {            
             BinaryFormatter bFormatter = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/" + fileName, FileMode.Open);
             PlayerData playerData = (PlayerData)bFormatter.Deserialize(file);
             file.Close();
 
-            SceneManager.LoadScene(playerData.level, LoadSceneMode.Single);
-            IEnumerator lateLoad = LateLoad(playerData);
-
-            StartCoroutine(lateLoad); 
+            StartCoroutine(LoadLevel(playerData));                    
         }
-    }  
+        else StartCoroutine(LoadLevel(levelIndex));
+    } 
     
-    IEnumerator LateLoad(PlayerData data)
+    
+    IEnumerator LoadLevel(PlayerData data = null)
     {
-        yield return new WaitForSeconds(0.5f);
+        Time.timeScale = 0;
+        Fader.controll.FadeOut(0.1f);        
+        while (!Fader.controll.stable) yield return null;
+        SceneManager.LoadScene(data.level, LoadSceneMode.Single);
+        while (Application.isLoadingLevel) yield return null;
         StatMaster stats = StatMaster.controll;
         stats.hp = data.health;     stats.hpValue.text = stats.hp.ToString();
         stats.gold = data.gold;     stats.goldValue.text = stats.gold.ToString();
@@ -82,7 +90,33 @@ public class GameController : MonoBehaviour {
             GameObject node = GameObject.Find("Nodes").transform.GetChild(i).gameObject;
             node.GetComponent<NodeController>().BuildByType(data.nodes[i]);
         }
-    }  
+        Fader.controll.FadeIn(0.1f);
+        while (!Fader.controll.stable) yield return null;
+        Time.timeScale = 1;
+    }
+
+    IEnumerator LoadLevel(int levelIndex = 0)
+    {
+        Time.timeScale = 0;
+        Fader.controll.FadeOut(0.1f);
+        while (!Fader.controll.stable) yield return null;
+        SceneManager.LoadScene(levelIndex, LoadSceneMode.Single);
+        while (Application.isLoadingLevel) yield return null;
+        Debug.Log("Level " + levelIndex + " loaded!");
+        Fader.controll.FadeIn(0.1f);
+        while (!Fader.controll.stable) yield return null;
+        Time.timeScale = 1;
+    }
+
+    public IEnumerator Starter()
+    {
+        Fader.controll.FadeOut(0.1f);
+        while (!Fader.controll.stable) yield return null;
+        SceneManager.LoadScene(1);
+        while (Application.isLoadingLevel) yield return null;
+        
+        Fader.controll.FadeIn(0.1f);
+    }
 }
 
 [Serializable]

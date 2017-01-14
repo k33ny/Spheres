@@ -26,30 +26,29 @@ public class AdvancedWaveSpawner : MonoBehaviour {
 
     private int currentWaveIndex = 0;
     private StatMaster stats;
-
-    void SpawnWave(Wave wave)
+    private float cd;
+    
+    float SpawnWave()
     {
-        StartCoroutine(wave.Spawn(spawnPoint.position));
+        stats.IncreaseWave();
+        Wave wave = waves[currentWaveIndex];
+        StartCoroutine(wave.Spawn(spawnPoint.position));        
+        float waitTimer = waves[currentWaveIndex].enemies.Length * waves[currentWaveIndex].spawnRate;
+        currentWaveIndex++;
+        return waitTimer + waitTime;            
     }
-
-    private IEnumerator WaveSpawner()
-    {
-        while (currentWaveIndex < waves.Length)
-        {
-            stats.IncreaseWave();
-            SpawnWave(waves[currentWaveIndex]);
-            float waitTimer = waves[currentWaveIndex].enemies.Length * waves[currentWaveIndex].spawnRate;
-            currentWaveIndex++;            
-            yield return new WaitForSeconds(waitTimer + waitTime);
-        }
-        Debug.Log("Level Complete");
-        stats.IncreaseLevel();
-        yield return 0; //Add level transition here
-    }
+        
 
     void Start()
     {
         stats = GameObject.Find("Stats").GetComponent<StatMaster>();
-        StartCoroutine(WaveSpawner());
+        cd = waitTime;      
+    }
+
+    void Update()
+    {
+        cd -= Time.deltaTime;
+        if (cd < 0.5f) cd = SpawnWave();
+        MenuController.controll.SetWaveCountdown((int)Mathf.Ceil(cd));        
     }
 }
