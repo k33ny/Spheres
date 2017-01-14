@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
     public static GameController controll;
     public string fileName = "Save_1";
+    public GameObject loadErrorTooltip;
 
     public float sfxVolume = 1f;
     public float musicVolume = 1f;
@@ -15,7 +16,7 @@ public class GameController : MonoBehaviour {
     public bool muteSFX = false;
     public bool muteMusic = false;
 
-    public float diffMultiplier = 1.4f;
+    public float diffMultiplier = 1.2f;
 
 	void Awake()
     {
@@ -26,7 +27,7 @@ public class GameController : MonoBehaviour {
             backgroundMusic = transform.GetComponent<AudioSource>();
         }
         else Destroy(transform.gameObject);
-    }   
+    }    
 
     public void Save()
     {
@@ -43,8 +44,11 @@ public class GameController : MonoBehaviour {
         playerData.health = StatMaster.controll.hp;
         playerData.gold = StatMaster.controll.gold;
         playerData.level = StatMaster.controll.level;
-        playerData.wave = StatMaster.controll.wave - 1;
+        int wave = StatMaster.controll.wave - 1;        
+        if (wave < 0) wave = 0;
+        playerData.wave = wave;
         playerData.nodes = nodeInfo;
+        playerData.difficultyMultiplier = diffMultiplier;
 
         BinaryFormatter bFormatter = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/" + fileName);
@@ -58,12 +62,17 @@ public class GameController : MonoBehaviour {
     {
         if (File.Exists(Application.persistentDataPath + "/" + fileName) && levelIndex == 0)
         {            
-            BinaryFormatter bFormatter = new BinaryFormatter();
+            BinaryFormatter bFormatter = new BinaryFormatter();            
             FileStream file = File.Open(Application.persistentDataPath + "/" + fileName, FileMode.Open);
             PlayerData playerData = (PlayerData)bFormatter.Deserialize(file);
             file.Close();
 
             StartCoroutine(LoadLevel(playerData));                    
+        }
+        else if (levelIndex == 0)
+        {
+            PlayerData tempData = null;
+            StartCoroutine(LoadLevel(tempData));
         }
         else StartCoroutine(LoadLevel(levelIndex));
     } 
@@ -71,15 +80,24 @@ public class GameController : MonoBehaviour {
     
     IEnumerator LoadLevel(PlayerData data = null)
     {
+        if (data == null)
+        {
+            Debug.Log("No save file found!");
+            GameObject tooltip = (GameObject)Instantiate(loadErrorTooltip, controll.transform);                    
+            Destroy(tooltip, 2f);
+            yield break;
+        }
+
         Time.timeScale = 0;
         Fader.controll.FadeOut(0.1f);        
         while (!Fader.controll.stable) yield return null;
-        SceneManager.LoadScene(data.level, LoadSceneMode.Single);
+        controll.diffMultiplier = data.difficultyMultiplier;
+        SceneManager.LoadScene(data.level + 1, LoadSceneMode.Single);
         while (Application.isLoadingLevel) yield return null;
         StatMaster stats = StatMaster.controll;
         stats.hp = data.health;     stats.hpValue.text = stats.hp.ToString();
         stats.gold = data.gold;     stats.goldValue.text = stats.gold.ToString();
-        stats.level = data.level;   stats.levelValue.text = stats.level.ToString();
+        stats.level = data.level;   if (data.level == 0) stats.levelValue.text = "SURVIVAL"; else stats.levelValue.text = stats.level.ToString();
         stats.wave = data.wave;     stats.waveValue.text = stats.wave.ToString();
 
         for (int i = 0; i < GameObject.Find("Nodes").transform.childCount; i++)
@@ -121,4 +139,5 @@ public class PlayerData
 {
     public int health, gold, level, wave;
     public string[] nodes; //Stores the turret indexes for each node. 
+    public float difficultyMultiplier;
 }

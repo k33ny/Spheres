@@ -6,7 +6,7 @@ public class InfiniteWaveSpawner : MonoBehaviour {
     public Transform spawnPosition;   
     public float spawnWaitWave = 10.0f;
 
-    private float spawnWaitUnit = 0.5f;
+    private float spawnWaitUnit = 0.3f;
     private float cd;    
     private StatMaster stats;
 

@@ -75,14 +75,13 @@ public class PauseController : MonoBehaviour {
     }
 
     public void SaveExit()
-    {
+    {        
         GameController.controll.Save();
-        Application.Quit();
+        Invoke("Application.Quit()", 1.5f);
     }
 
     public void StartGame(int level = 1)
-    {
-        if (level == 0) GameController.controll.diffMultiplier = 1.1f;
+    {        
         level++;
         GameController.controll.sfxVolume = sfxSlider.value;
         GameController.controll.muteSFX = sfxToggle.isOn;
@@ -100,5 +99,8 @@ public class PauseController : MonoBehaviour {
         GameController.controll.Load();
     }
 
-    
+    public void CallSave()
+    {
+        GameController.controll.Save();
+    }    
 }

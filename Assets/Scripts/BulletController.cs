@@ -42,7 +42,7 @@ public class BulletController : MonoBehaviour {
     private void Hit()
     {
         
-        GameObject explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);
+        GameObject explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);        
         Destroy(explosion, 1.0f);
         Destroy(gameObject);
         if (target.GetComponent<EnemyController>().invincible) return;
@@ -62,6 +62,8 @@ public class BulletController : MonoBehaviour {
     private void Explode()
     {
         GameObject explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);
+        if (GameController.controll.muteSFX) explosion.GetComponent<AudioSource>().volume = 0;
+        else explosion.GetComponent<AudioSource>().volume = GameController.controll.sfxVolume;        
         Destroy(explosion, 1.0f);
         Destroy(gameObject);
         Collider[] detection = Physics.OverlapSphere(transform.position, explosionRadius);

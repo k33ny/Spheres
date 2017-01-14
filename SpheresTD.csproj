@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MainMenuControll.cs" />
     <Compile Include="Assets\Scripts\AdvancedWaveSpawner.cs" />
     <Compile Include="Assets\Scripts\BuilderBtn.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />
