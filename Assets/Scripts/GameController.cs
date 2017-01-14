@@ -13,7 +13,9 @@ public class GameController : MonoBehaviour {
     public float musicVolume = 1f;
     public AudioSource backgroundMusic;
     public bool muteSFX = false;
-    public bool muteMusic = false; 
+    public bool muteMusic = false;
+
+    public float diffMultiplier = 1.4f;
 
 	void Awake()
     {
@@ -24,12 +26,7 @@ public class GameController : MonoBehaviour {
             backgroundMusic = transform.GetComponent<AudioSource>();
         }
         else Destroy(transform.gameObject);
-    }
-
-    private void Start()
-    {
-        Fader.controll.FadeIn(0.1f);
-    }
+    }   
 
     public void Save()
     {
@@ -95,14 +92,14 @@ public class GameController : MonoBehaviour {
         Time.timeScale = 1;
     }
 
-    IEnumerator LoadLevel(int levelIndex = 0)
+    IEnumerator LoadLevel(int levelIndex = 1)
     {
         Time.timeScale = 0;
         Fader.controll.FadeOut(0.1f);
         while (!Fader.controll.stable) yield return null;
         SceneManager.LoadScene(levelIndex, LoadSceneMode.Single);
         while (Application.isLoadingLevel) yield return null;
-        Debug.Log("Level " + levelIndex + " loaded!");
+        Debug.Log("Level " + (levelIndex - 1) + " loaded!");
         Fader.controll.FadeIn(0.1f);
         while (!Fader.controll.stable) yield return null;
         Time.timeScale = 1;

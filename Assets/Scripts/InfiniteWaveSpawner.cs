@@ -3,19 +3,17 @@ using System.Collections;
 
 public class InfiniteWaveSpawner : MonoBehaviour {
     public GameObject enemyPrefab;
-    public Transform spawnPosition;
+    public Transform spawnPosition;   
+    public float spawnWaitWave = 10.0f;
 
-    private float spawnWaitWave = 5.0f;
     private float spawnWaitUnit = 0.5f;
-
     private float cd;    
     private StatMaster stats;
 
     void Start()
     {
-        cd = spawnWaitWave;
-        stats = GameObject.Find("Stats").GetComponent<StatMaster>();
-        enemyPrefab.GetComponent<EnemyController>().hitpoints = enemyPrefab.GetComponent<EnemyController>().baseHP;
+        cd = 5f;
+        stats = GameObject.Find("Stats").GetComponent<StatMaster>();        
     }
 
     void Update()
@@ -32,7 +30,7 @@ public class InfiniteWaveSpawner : MonoBehaviour {
     IEnumerator SpawnWave()
     {        
         stats.IncreaseWave();
-        enemyPrefab.GetComponent<EnemyController>().MultiplyHP(1.2f);
+        enemyPrefab.GetComponent<EnemyController>().MultiplyHP(1.05f);
         for (int i = 0; i < stats.wave * 0.8; i++)
         {
             Instantiate(enemyPrefab, spawnPosition.position, spawnPosition.rotation);

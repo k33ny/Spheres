@@ -18,14 +18,19 @@ public class TooltipController : MonoBehaviour {
     }
 
     private void Start()
-    {
-        tooltip.FindChild("Name").GetComponent<Text>().text = transform.FindChild("Name").GetComponent<Text>().text;
+    {        
         if (infoPanel.childCount <= 1) return;
+        tooltip.FindChild("Name").GetComponent<Text>().text = GetComponent<BuilderBtn>().prefab.GetComponent<TurretController>().type;
         TurretController prefab = GetComponent<BuilderBtn>().prefab.GetComponent<TurretController>();
         infoPanel.FindChild("Damage").GetComponent<Text>().text = "Damage: " + prefab.damage;
         infoPanel.FindChild("FireRate").GetComponent<Text>().text = "FireRate: " + prefab.fireRate;
         infoPanel.FindChild("Range").GetComponent<Text>().text = "Range: " + prefab.range;
         infoPanel.FindChild("Misc").GetComponent<Text>().text = prefab.description;
+    }    
+
+    private void OnDisable()
+    {
+        tooltip.gameObject.SetActive(false);
     }
 
 
@@ -44,7 +49,7 @@ public class TooltipController : MonoBehaviour {
     {
         while (isActive)
         {
-            tooltip.position = Input.mousePosition;
+            tooltip.position = Input.mousePosition + new Vector3(0, 5f, 0);
             yield return null;
         }
     }

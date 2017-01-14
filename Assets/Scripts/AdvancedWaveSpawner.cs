@@ -7,7 +7,7 @@ public class AdvancedWaveSpawner : MonoBehaviour {
 	public class Wave
     {
         public string name;
-        public float spawnRate;        
+        public float spawnRate = 0.5f;        
         public GameObject[] enemies;               
                 
         public IEnumerator Spawn(Vector3 position)
@@ -21,12 +21,13 @@ public class AdvancedWaveSpawner : MonoBehaviour {
     }
 
     public Transform spawnPoint;
-    public float waitTime = 5f;
+    public float waitTime = 20f;
     public Wave[] waves;
 
     private int currentWaveIndex = 0;
     private StatMaster stats;
     private float cd;
+    private int enemyCount;
     
     float SpawnWave()
     {
@@ -42,13 +43,15 @@ public class AdvancedWaveSpawner : MonoBehaviour {
     void Start()
     {
         stats = GameObject.Find("Stats").GetComponent<StatMaster>();
-        cd = waitTime;      
+        cd = 10f;      
     }
 
     void Update()
     {
         cd -= Time.deltaTime;
-        if (cd < 0.5f) cd = SpawnWave();
-        MenuController.controll.SetWaveCountdown((int)Mathf.Ceil(cd));        
+        if (cd < 0.5f && currentWaveIndex < waves.Length) cd = SpawnWave();
+        MenuController.controll.SetWaveCountdown((int)Mathf.Ceil(cd));
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        if (enemyCount == 0 && currentWaveIndex > 0 && cd > 5) cd = 5f;       
     }
 }

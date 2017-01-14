@@ -24,8 +24,9 @@ public class EnemyController : MonoBehaviour {
     {
         target = Waypoints.points[targetIndex];
         hpBar = transform.FindChild("EnemyCanvas").FindChild("HealthBar").GetComponent<Image>();        
-        maxHP = hitpoints;
-        maxSpeed = speed;        
+        maxHP = baseHP * GameController.controll.diffMultiplier;
+        maxSpeed = speed;
+        hitpoints = baseHP * GameController.controll.diffMultiplier;       
     }
 
     void Update()
@@ -56,7 +57,7 @@ public class EnemyController : MonoBehaviour {
     public void MultiplyHP(float multiplier)
     {
         maxHP *= multiplier;
-        hitpoints *= multiplier;
+        hitpoints *= multiplier;        
     }
 
     public void UpdateHealthBar()

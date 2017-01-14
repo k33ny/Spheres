@@ -76,6 +76,7 @@ public class TurretController : MonoBehaviour {
 
     void Shoot()
     {
+        if (target == null) return;
         GameObject currentBullet = (GameObject)Instantiate(bulletPrefab, bulletSpawn.position, bulletPrefab.transform.rotation);
         BulletController bulletControll = currentBullet.GetComponent<BulletController>();
         if (bulletControll != null) bulletControll.SetTarget(target, damage);
@@ -101,6 +102,11 @@ public class TurretController : MonoBehaviour {
         {
             target = closestEnemy;
             if (laserParticles) laserParticles.transform.position = target.transform.position;
+        }
+        else
+        {
+            target = null;
+            if (laserParticles) Destroy(laserParticles);
         }
 
         if (shotAudio != null)

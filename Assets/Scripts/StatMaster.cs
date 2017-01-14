@@ -20,7 +20,7 @@ public class StatMaster : MonoBehaviour {
 
         hpValue.text = hp.ToString();
         goldValue.text = gold.ToString();
-        levelValue.text = level.ToString();
+        if (level == 0) levelValue.text = "SURVIVAL"; else levelValue.text = level.ToString();
         waveValue.text = wave.ToString();
         gameOverScreen.SetActive(false);
         if (controll == null) controll = this;

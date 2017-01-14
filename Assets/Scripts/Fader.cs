@@ -22,6 +22,7 @@ public class Fader : MonoBehaviour {
             controll = this;
             fadeScreenPrefab = (GameObject)Instantiate(fadeScreenPrefab, transform);
             image = fadeScreenPrefab.GetComponentInChildren<Image>();
+            FadeIn(0.1f);
         }
         else Destroy(controll);        
     }
@@ -38,7 +39,7 @@ public class Fader : MonoBehaviour {
         else
         {
             stable = true;
-            fadeScreenPrefab.SetActive(!stable);            
+            if (currentAlph == 0) fadeScreenPrefab.SetActive(false);            
         }
 
     }
@@ -46,9 +47,9 @@ public class Fader : MonoBehaviour {
     public float FadeIn(float speed = 0)
     {
         stable = false;
-        fadeScreenPrefab.SetActive(!stable);
-        if (speed > 0) controll.fadeSpeed = speed;
         controll.image.color = new Color(0, 0, 0, 1);
+        controll.fadeScreenPrefab.SetActive(!stable);
+        if (speed > 0) controll.fadeSpeed = speed;        
         controll.dir = -1;
         controll.targetAlph = 0;
         controll.currentAlph = 1;
@@ -58,9 +59,9 @@ public class Fader : MonoBehaviour {
     public float FadeOut(float speed = 0)
     {
         stable = false;
-        fadeScreenPrefab.SetActive(!stable);
-        if (speed > 0) controll.fadeSpeed = speed;
         controll.image.color = new Color(0, 0, 0, 0);
+        controll.fadeScreenPrefab.SetActive(!stable);
+        if (speed > 0) controll.fadeSpeed = speed;        
         controll.dir = 1;
         controll.targetAlph = 1;
         controll.currentAlph = 0;
