@@ -81,7 +81,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\MainMenuControll.cs" />
     <Compile Include="Assets\Scripts\AdvancedWaveSpawner.cs" />
     <Compile Include="Assets\Scripts\BuilderBtn.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />
@@ -90,6 +89,7 @@
     <Compile Include="Assets\Scripts\Fader.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\InfiniteWaveSpawner.cs" />
+    <Compile Include="Assets\Scripts\MainMenuControll.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
     <Compile Include="Assets\Scripts\NodeController.cs" />
     <Compile Include="Assets\Scripts\PauseController.cs" />
@@ -98,9 +98,9 @@
     <Compile Include="Assets\Scripts\Restarter.cs" />
     <Compile Include="Assets\Scripts\Seller.cs" />
     <Compile Include="Assets\Scripts\StatMaster.cs" />
+    <Compile Include="Assets\Scripts\TooltipController.cs" />
     <Compile Include="Assets\Scripts\TurretController.cs" />
     <Compile Include="Assets\Scripts\Waypoints.cs" />
-    <Compile Include="Assets\TooltipController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

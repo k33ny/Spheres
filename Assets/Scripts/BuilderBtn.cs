@@ -16,7 +16,7 @@ public class BuilderBtn : MonoBehaviour {
         stats = StatMaster.controll;
         nameText.text = prefab.GetComponent<TurretController>().name;
         price = prefab.GetComponent<TurretController>().price;        
-        valueText.text = (-price).ToString() + "$";
+        valueText.text = (-price).ToString() + "£";
         button.image.sprite = prefab.GetComponent<TurretController>().sprite;
     }
 

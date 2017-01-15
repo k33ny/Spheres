@@ -7,7 +7,7 @@ public class AdvancedWaveSpawner : MonoBehaviour {
 	public class Wave
     {
         public string name;
-        public float spawnRate = 0.5f;        
+        public float spawnRate = 0.3f;        
         public GameObject[] enemies;               
                 
         public IEnumerator Spawn(Vector3 position)
@@ -20,6 +20,7 @@ public class AdvancedWaveSpawner : MonoBehaviour {
         }
     }
 
+    public GameObject winScreen;
     public Transform spawnPoint;
     public float waitTime = 20f;
     public Wave[] waves;
@@ -28,14 +29,18 @@ public class AdvancedWaveSpawner : MonoBehaviour {
     private StatMaster stats;
     private float cd;
     private int enemyCount;
+    private bool isLast = false;
+    private bool isEnding = false;
     
     float SpawnWave()
     {
+        if (isLast) return 0;
         stats.IncreaseWave();
         Wave wave = waves[currentWaveIndex];
         StartCoroutine(wave.Spawn(spawnPoint.position));        
         float waitTimer = waves[currentWaveIndex].enemies.Length * waves[currentWaveIndex].spawnRate;
         currentWaveIndex++;
+        if (currentWaveIndex >= waves.Length) isLast = true;
         return waitTimer + waitTime;            
     }
         
@@ -43,15 +48,30 @@ public class AdvancedWaveSpawner : MonoBehaviour {
     void Start()
     {
         stats = GameObject.Find("Stats").GetComponent<StatMaster>();
-        cd = 10f;      
+        cd = 10f;
+        winScreen.SetActive(false);    
     }
 
     void Update()
     {
-        cd -= Time.deltaTime;
-        if (cd < 0.5f && currentWaveIndex < waves.Length) cd = SpawnWave();
-        MenuController.controll.SetWaveCountdown((int)Mathf.Ceil(cd));
-        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if (enemyCount == 0 && currentWaveIndex > 0 && cd > 5) cd = 5f;       
+        //if (enemyCount == 0 && isLast) ;
+        if (!isLast)
+        {
+            cd -= Time.deltaTime;
+            if (cd < 0.5f && currentWaveIndex < waves.Length) cd = SpawnWave();
+            MenuController.controll.SetWaveCountdown((int)Mathf.Ceil(cd));
+            enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+            if (enemyCount == 0 && currentWaveIndex > 0 && cd > 5) cd = 5f;
+        }
+        else
+        {
+            enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+            MenuController.controll.waveCountdown.text = "Final Wave";
+            if (enemyCount == 0 && !isEnding)
+            {
+                isEnding = true;
+                StartCoroutine(MenuController.CompleteLevel(winScreen));
+            }
+        }
     }
 }

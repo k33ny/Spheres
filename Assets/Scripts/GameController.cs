@@ -17,6 +17,8 @@ public class GameController : MonoBehaviour {
     public bool muteMusic = false;
 
     public float diffMultiplier = 1.2f;
+    public int level = 0;
+    public int hp = 10;
 
 	void Awake()
     {
@@ -25,6 +27,7 @@ public class GameController : MonoBehaviour {
             controll = this;
             DontDestroyOnLoad(transform.gameObject);            
             backgroundMusic = transform.GetComponent<AudioSource>();
+            Screen.SetResolution(600, 900, false);
         }
         else Destroy(transform.gameObject);
     }    

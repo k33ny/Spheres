@@ -11,7 +11,7 @@ public class Fader : MonoBehaviour {
 
     public static Fader controll;
     private float targetAlph = 0;
-    private float currentAlph = 0;
+    public float currentAlph = 0;
     private float dir = 1;
     private Image image;
 

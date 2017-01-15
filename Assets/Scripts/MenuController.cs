@@ -31,4 +31,21 @@ public class MenuController : MonoBehaviour {
         waveCountdown.text = "Next wave in: " + time;
     }
 
+    public static IEnumerator CompleteLevel(GameObject endScreen)
+    {
+        GameController.controll.hp = StatMaster.controll.hp;
+        GameController.controll.diffMultiplier *= 1.2f;    
+        Fader.controll.FadeOut(0.5f);
+        while (!Fader.controll.stable) yield return null;
+        endScreen.SetActive(true);
+        Time.timeScale = 0;
+        Fader.controll.FadeIn(0.5f);
+        while (!Fader.controll.stable) yield return null;
+        Debug.Log("Transition Complete");
+    }    
+
+    public void Test(GameObject s)
+    {
+        StartCoroutine(CompleteLevel(s));
+    }
 }

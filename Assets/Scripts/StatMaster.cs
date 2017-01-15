@@ -18,6 +18,9 @@ public class StatMaster : MonoBehaviour {
         levelText.text = "Level:";
         waveText.text = "Wave:";
 
+        if (GameController.controll.level > level && level != 0) level = GameController.controll.level;
+        if (GameController.controll.hp < hp && level != 0) hp = GameController.controll.hp;
+
         hpValue.text = hp.ToString();
         goldValue.text = gold.ToString();
         if (level == 0) levelValue.text = "SURVIVAL"; else levelValue.text = level.ToString();
@@ -32,12 +35,19 @@ public class StatMaster : MonoBehaviour {
     {
         hp--;
         hpValue.text = hp.ToString();
-        if (hp <= 0)
-        {
-            gameOverScreen.SetActive(true);
-            gameOverScreen.GetComponentInChildren<Text>().text = "You've managed to reach wave " + wave;
-            Time.timeScale = 0;
-        }
+        if (hp <= 0) StartCoroutine(EndGame());        
+    }
+
+    IEnumerator EndGame()
+    {
+        Fader.controll.FadeOut(0.5f);
+        while (!Fader.controll.stable) yield return null;
+        gameOverScreen.GetComponentInChildren<Text>().text = "You've managed to reach wave " + wave;
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0;
+        Fader.controll.FadeIn(0.5f);
+        while (!Fader.controll.stable) yield return null;
+        Debug.Log("Transition Complete");
     }
 
     public bool CanAfford(int price)

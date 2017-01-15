@@ -22,7 +22,7 @@ public class PauseController : MonoBehaviour {
         sfxToggle.isOn = GameController.controll.muteSFX;
         musicSlider.value = GameController.controll.musicVolume;
         musicToggle.isOn = GameController.controll.muteMusic;
-    }
+    }    
 
     void Update()
     {
@@ -75,9 +75,15 @@ public class PauseController : MonoBehaviour {
     }
 
     public void SaveExit()
-    {        
+    {
+        StartCoroutine(SaveAndExit());
+    }
+
+    IEnumerator SaveAndExit()
+    {
         GameController.controll.Save();
-        Invoke("Application.Quit()", 1.5f);
+        yield return new WaitForSecondsRealtime(0.2f);        
+        Application.Quit();        
     }
 
     public void StartGame(int level = 1)
