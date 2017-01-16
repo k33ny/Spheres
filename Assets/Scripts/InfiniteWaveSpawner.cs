@@ -9,6 +9,7 @@ public class InfiniteWaveSpawner : MonoBehaviour {
     private float spawnWaitUnit = 0.3f;
     private float cd;    
     private StatMaster stats;
+    private bool lost = false;
 
     void Start()
     {
@@ -18,7 +19,8 @@ public class InfiniteWaveSpawner : MonoBehaviour {
 
     void Update()
     {
-        if (cd <= 0.0f)
+        if (stats.hp <= 0) lost = true;
+        if (cd <= 0.0f && !lost)
         {
             StartCoroutine(SpawnWave());
             cd = spawnWaitWave;

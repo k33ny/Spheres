@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PauseController : MonoBehaviour {
 
     public Transform pauseMenu;
+    public Transform pauseButton;
 
     public Slider sfxSlider;
     public Toggle sfxToggle;
@@ -26,7 +27,7 @@ public class PauseController : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && GameController.controll.inGame)
         {
             if (isPaused) Unpause();
             else Pause();
@@ -35,7 +36,8 @@ public class PauseController : MonoBehaviour {
 
     public void Pause()
     {
-        Fader.controll.FadeOut(0.1f);
+        pauseButton.GetComponent<Button>().interactable = false;
+        Fader.controll.FadeOut(0.1f, true);
         pauseMenu.gameObject.SetActive(true);
         isPaused = true;
         Time.timeScale = 0;
@@ -43,7 +45,8 @@ public class PauseController : MonoBehaviour {
 
     public void Unpause()
     {
-        Fader.controll.FadeIn(0.1f);
+        pauseButton.GetComponent<Button>().interactable = true;
+        Fader.controll.FadeIn(0.1f, true);
         pauseMenu.gameObject.SetActive(false);
         isPaused = false;
         Time.timeScale = 1;
@@ -65,6 +68,7 @@ public class PauseController : MonoBehaviour {
     public void MuteMusic()
     {
         bool muted = musicToggle.isOn;
+        GameController.controll.muteMusic = muted;
         GameController.controll.backgroundMusic.mute = muted;
     }
 

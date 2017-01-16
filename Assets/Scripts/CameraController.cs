@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour {
     }
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.C)) toggleMove = !toggleMove;
         if (!toggleMove) return;
 
         if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panOffset)

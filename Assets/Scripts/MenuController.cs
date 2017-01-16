@@ -46,6 +46,7 @@ public class MenuController : MonoBehaviour {
 
     public void Test(GameObject s)
     {
+        GameController.controll.inGame = false;
         StartCoroutine(CompleteLevel(s));
     }
 }

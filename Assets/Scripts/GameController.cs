@@ -19,6 +19,7 @@ public class GameController : MonoBehaviour {
     public float diffMultiplier = 1.2f;
     public int level = 0;
     public int hp = 10;
+    public bool inGame = false;
 
 	void Awake()
     {
@@ -27,7 +28,7 @@ public class GameController : MonoBehaviour {
             controll = this;
             DontDestroyOnLoad(transform.gameObject);            
             backgroundMusic = transform.GetComponent<AudioSource>();
-            Screen.SetResolution(600, 900, false);
+            Screen.SetResolution(600, 900, false);            
         }
         else Destroy(transform.gameObject);
     }    
@@ -111,6 +112,7 @@ public class GameController : MonoBehaviour {
         Fader.controll.FadeIn(0.1f);
         while (!Fader.controll.stable) yield return null;
         Time.timeScale = 1;
+        controll.inGame = true;
     }
 
     IEnumerator LoadLevel(int levelIndex = 1)
@@ -124,6 +126,7 @@ public class GameController : MonoBehaviour {
         Fader.controll.FadeIn(0.1f);
         while (!Fader.controll.stable) yield return null;
         Time.timeScale = 1;
+        controll.inGame = true;
     }
 
     public IEnumerator Starter()

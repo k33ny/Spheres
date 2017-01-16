@@ -13,12 +13,14 @@ public class Restarter : MonoBehaviour {
 
     IEnumerator ReloadMainMenu()
     {
-        Fader.controll.FadeOut(0.1f);
+        GameController.controll.inGame = false;
+        if (Fader.controll.currentAlph != 1)
+            Fader.controll.FadeOut(0.1f, true);
         while (!Fader.controll.stable) yield return null;       
         SceneManager.LoadScene(0, LoadSceneMode.Single);        
-        Fader.controll.FadeIn(0.1f);
+        Fader.controll.FadeIn(0.1f, true);
         Time.timeScale = 1;
-    }
+    }      
 
     public void Quit()
     {
@@ -40,6 +42,7 @@ public class Restarter : MonoBehaviour {
     
     public void GoToLevel(int level)
     {
+        GameController.controll.inGame = false;
         GameController.controll.level = level;
         level++;            
         GameController.controll.Load(level);

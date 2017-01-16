@@ -35,11 +35,12 @@ public class StatMaster : MonoBehaviour {
     {
         hp--;
         hpValue.text = hp.ToString();
-        if (hp <= 0) StartCoroutine(EndGame());        
+        if (hp <= 0 && GameController.controll.inGame) StartCoroutine(EndGame());        
     }
 
     IEnumerator EndGame()
     {
+        GameController.controll.inGame = false;
         Fader.controll.FadeOut(0.5f);
         while (!Fader.controll.stable) yield return null;
         gameOverScreen.GetComponentInChildren<Text>().text = "You've managed to reach wave " + wave;

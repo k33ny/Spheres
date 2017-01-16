@@ -70,6 +70,7 @@ public class AdvancedWaveSpawner : MonoBehaviour {
             if (enemyCount == 0 && !isEnding)
             {
                 isEnding = true;
+                GameController.controll.inGame = false;
                 StartCoroutine(MenuController.CompleteLevel(winScreen));
             }
         }
