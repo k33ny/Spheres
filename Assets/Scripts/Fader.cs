@@ -42,10 +42,7 @@ public class Fader : MonoBehaviour {
         {
             stable = true;
             if (currentAlph == 0) fadeScreenPrefab.SetActive(false);            
-        }
-        //-----------
-        if (Input.GetKeyDown(KeyCode.Space)) Test(isStopped);
-        //------------
+        }        
     }
 
     public float FadeIn(float speed = 0, bool fromCurrent = false)

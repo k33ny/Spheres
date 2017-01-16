@@ -42,11 +42,5 @@ public class MenuController : MonoBehaviour {
         Fader.controll.FadeIn(0.5f);
         while (!Fader.controll.stable) yield return null;
         Debug.Log("Transition Complete");
-    }    
-
-    public void Test(GameObject s)
-    {
-        GameController.controll.inGame = false;
-        StartCoroutine(CompleteLevel(s));
     }
 }
